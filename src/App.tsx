@@ -69,6 +69,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    document.title = 'MIS XV SOFIA';
     loadData();
     const interval = setInterval(loadData, 20000);
     return () => clearInterval(interval);
