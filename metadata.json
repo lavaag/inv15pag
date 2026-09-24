@@ -1,0 +1,6 @@
+{
+  "name": "Invitación Mis 15 Sofía - Clahe Eventos",
+  "description": "Invitación digital interactiva estilo La Tarjeta Digital para los 15 años de Sofía en Clahe Eventos Berazategui, con confirmación de asistencia en tiempo real, desglose de condiciones alimentarias y enlace a Google Sheets/Excel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
