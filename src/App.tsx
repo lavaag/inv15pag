@@ -15,20 +15,23 @@ import { getConfirmedGuests, DEFAULT_CONFIG } from './services/api';
 import { RsvpRecord, DietarySummary, AppConfig } from './types';
 
 export default function App() {
-  // Routing: Detect /admin, /confirmados, #/admin, #/confirmados
-  const [currentRoute, setCurrentRoute] = useState<'invitation' | 'confirmados' | 'admin'>(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      if (path.includes('admin') || hash.includes('admin')) {
-        return 'admin';
-      }
-      if (path.includes('confirmados') || hash.includes('confirmados')) {
-        return 'confirmados';
-      }
+  // Route detector: supports path (/admin), hash (#/admin), and query params (?admin, ?page=admin)
+  const detectRoute = (): 'invitation' | 'confirmados' | 'admin' => {
+    if (typeof window === 'undefined') return 'invitation';
+    const path = window.location.pathname.toLowerCase();
+    const hash = window.location.hash.toLowerCase();
+    const search = window.location.search.toLowerCase();
+
+    if (path.includes('admin') || hash.includes('admin') || search.includes('admin')) {
+      return 'admin';
+    }
+    if (path.includes('confirmados') || hash.includes('confirmados') || search.includes('confirmados')) {
+      return 'confirmados';
     }
     return 'invitation';
-  });
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<'invitation' | 'confirmados' | 'admin'>(detectRoute);
 
   // Splash screen state: starts visible until user clicks "INGRESAR"
   const [hasEntered, setHasEntered] = useState<boolean>(false);
@@ -78,15 +81,7 @@ export default function App() {
   // Sync route on popstate and hashchange
   useEffect(() => {
     const handleLocationChange = () => {
-      const path = window.location.pathname.toLowerCase();
-      const hash = window.location.hash.toLowerCase();
-      if (path.includes('admin') || hash.includes('admin')) {
-        setCurrentRoute('admin');
-      } else if (path.includes('confirmados') || hash.includes('confirmados')) {
-        setCurrentRoute('confirmados');
-      } else {
-        setCurrentRoute('invitation');
-      }
+      setCurrentRoute(detectRoute());
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -165,6 +160,7 @@ export default function App() {
         summary={summary}
         config={config}
         onOpenConfirmedModal={() => navigateTo('confirmados')}
+        onNavigate={navigateTo}
         onRefreshData={loadData}
       />
 

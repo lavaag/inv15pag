@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { RsvpRecord, DietaryCondition, DietarySummary, AppConfig } from '../types';
 import { submitRsvp, exportToExcelCsv } from '../services/api';
 import confetti from 'canvas-confetti';
-import { Copy, Check, FileSpreadsheet, ExternalLink, Calendar as CalendarIcon, MapPin, Heart } from 'lucide-react';
+import { Copy, Check, FileSpreadsheet, ExternalLink, Calendar as CalendarIcon, MapPin, Heart, Lock } from 'lucide-react';
 
 interface DigitalInvitationProps {
   records: RsvpRecord[];
@@ -10,6 +10,7 @@ interface DigitalInvitationProps {
   config: AppConfig;
   onOpenConfirmedModal: () => void;
   onRefreshData: () => void;
+  onNavigate?: (route: 'invitation' | 'confirmados' | 'admin') => void;
 }
 
 interface GuestFormState {
@@ -26,6 +27,7 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
   config,
   onOpenConfirmedModal,
   onRefreshData,
+  onNavigate,
 }) => {
   // Countdown target
   const targetDate = useMemo(() => {
@@ -686,14 +688,28 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
             <p className="text-[10px] font-montserrat font-light tracking-[0.2em] text-[#b395a5] uppercase">
               {config.lugarDireccion || 'Berazategui, Buenos Aires'}
             </p>
+            <div className="pt-3 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowSecretAccessModal(true)}
+                className="text-[10px] text-[#bda8b4] hover:text-[#7e526a] tracking-widest uppercase flex items-center gap-1.5 transition-colors opacity-60 hover:opacity-100 py-1 px-2"
+                title="Acceso para Anfitriones (/admin y /confirmados)"
+              >
+                <Lock className="w-3 h-3" />
+                <span>Acceso Anfitriones</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Hidden Private Host Access Modal: Triggered strictly via secret 4-tap or Alt+A */}
+      {/* Private Host Access Modal: Triggered via heart tap, Alt+A, or subtle host lock */}
       {showSecretAccessModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-[#e8dbe2] animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-10 h-10 mx-auto rounded-full bg-[#7e526a]/10 flex items-center justify-center text-[#7e526a]">
+              <Lock className="w-5 h-5" />
+            </div>
             <h4 className="text-sm font-bold tracking-widest uppercase text-[#7e526a]">
               Acceso Privado para Anfitriones
             </h4>
@@ -701,18 +717,34 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
               Panel de gestión y confirmaciones reservado para la quinceañera y organizadores.
             </p>
             <div className="space-y-2 pt-2">
-              <a
-                href="/confirmados"
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSecretAccessModal(false);
+                  if (onNavigate) {
+                    onNavigate('confirmados');
+                  } else {
+                    window.location.href = '/confirmados';
+                  }
+                }}
                 className="block w-full py-3 bg-[#7e526a] text-white text-xs font-bold tracking-widest uppercase hover:bg-[#684156] transition-colors"
               >
                 Ver Lista de Confirmados
-              </a>
-              <a
-                href="/admin"
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSecretAccessModal(false);
+                  if (onNavigate) {
+                    onNavigate('admin');
+                  } else {
+                    window.location.href = '/admin';
+                  }
+                }}
                 className="block w-full py-3 border border-[#7e526a] text-[#7e526a] text-xs font-bold tracking-widest uppercase hover:bg-[#f7edf2] transition-colors"
               >
                 Editar Contenido y Música (/admin)
-              </a>
+              </button>
               <button
                 type="button"
                 onClick={() => setShowSecretAccessModal(false)}

@@ -3,8 +3,47 @@ import { RsvpRecord, DietarySummary, AppConfig } from '../types';
 const STORAGE_KEY = 'mis15_sofia_confirmados_v1';
 const CONFIG_KEY = 'mis15_sofia_config_v1';
 
-// Initial sample data if no data exists yet, so Sofía's family sees how it looks immediately
+// Initial records with Sofía's confirmed guests
 const INITIAL_RECORDS: RsvpRecord[] = [
+  {
+    titularNombre: "Ignacio Fredes",
+    telefono: "1143543454",
+    asiste: false,
+    condicionTitular: "Ninguna (Menú tradicional)",
+    detalleCondicionTitular: "",
+    acompanantes: [],
+    cancionSugerida: "",
+    mensajeDedicatoria: "",
+    id: "rsvp-1790252157885-np0yt",
+    fechaCreacion: "2026-09-24T12:15:57.885Z",
+    totalPersonas: 0
+  },
+  {
+    titularNombre: "Gonzalo Fredes",
+    telefono: "1143543454",
+    asiste: true,
+    condicionTitular: "Vegetariano",
+    detalleCondicionTitular: "",
+    acompanantes: [],
+    cancionSugerida: "",
+    mensajeDedicatoria: "",
+    id: "rsvp-1790252136030-6dabn",
+    fechaCreacion: "2026-09-24T12:15:36.030Z",
+    totalPersonas: 1
+  },
+  {
+    titularNombre: "mATIAS gONZALEZ",
+    telefono: "1122334455",
+    asiste: true,
+    condicionTitular: "Ninguna (Menú tradicional)",
+    detalleCondicionTitular: "",
+    acompanantes: [],
+    cancionSugerida: "El hechizo RKT",
+    mensajeDedicatoria: "",
+    id: "rsvp-1790251895864-p5jci",
+    fechaCreacion: "2026-09-24T12:11:35.864Z",
+    totalPersonas: 1
+  },
   {
     id: 'rsvp-1',
     fechaCreacion: '2026-09-20T14:30:00.000Z',
@@ -65,7 +104,7 @@ const INITIAL_RECORDS: RsvpRecord[] = [
 export const DEFAULT_CONFIG: AppConfig = {
   adminPassword: 'EventoSofi2026',
   nombreQuinceanera: 'Sofía',
-  tituloIngreso: 'MIS 15 SOFÍA',
+  tituloIngreso: 'MIS XV',
   fraseIngreso: 'QUIERO QUE SEAS PARTE DE ESTE MOMENTO TAN IMPORTANTE PARA MÍ',
   subtituloHero: 'FESTEJAMOS MIS 15',
   fraseEmotiva:
@@ -75,10 +114,9 @@ export const DEFAULT_CONFIG: AppConfig = {
   horaTexto: '21:00 HS',
   fechaIsoCountdown: '2026-10-10T21:00:00',
   fechaLimiteRsvp: '20 de Septiembre de 2026',
-  lugarNombre: 'Clahe Eventos',
-  lugarDireccion: 'Calle 158 N° 4561 (e/ 45 y 46), Plátanos, Berazategui',
-  linkMaps:
-    'https://www.google.com/maps/search/?api=1&query=Clahe+Eventos+Berazategui+Calle+158+4561',
+  lugarNombre: 'Clahe Eventos Berazategui',
+  lugarDireccion: 'Av. Eva Peron 3678, B1884 Berazategui, Provincia de Buenos Aires',
+  linkMaps: 'https://maps.app.goo.gl/iiYnhgRXMxxULKzQ6',
   linkCalendar:
     'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Mis+15+Sof%C3%ADa+-+Clahe+Eventos&dates=20261011T000000Z/20261011T080000Z&details=%C2%A1Festejo+de+los+15+a%C3%B1os+de+Sof%C3%ADa+en+Clahe+Eventos+Berazategui!&location=Clahe+Eventos,+Calle+158+N%C2%B0+4561,+Pl%C3%A1tanos,+Berazategui',
 
@@ -86,20 +124,20 @@ export const DEFAULT_CONFIG: AppConfig = {
   dressCodeDescripcion: 'EL COLOR BLANCO SE RESERVA PARA LA QUINCEAÑERA',
 
   musicaUrl:
-    'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-cinematic-piano-112191.mp3',
-  musicaTitulo: 'Romantic Cinematic Piano (Vals de 15)',
+    'https://www.youtube.com/watch?v=Z9a4dzEGJxw&list=RDZ9a4dzEGJxw&start_radio=1&pp=ygUQdGVuZ28gdW4gZmVsbGluZ6AHAQ%3D%3D',
+  musicaTitulo: 'PEPU- TENGO UN FEELING',
 
   heroImageUrl:
-    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+    'https://i.postimg.cc/mrY8tVNy/Whats-App-Image-2026-09-07-at-19-55-12-(2).jpg',
   dressCodeImageUrl:
-    'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+    'https://i.postimg.cc/9F08JdCT/Whats-App-Image-2026-09-08-at-22-11-18-(2).jpg',
   finalImageUrl:
-    'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=80',
+    'https://i.postimg.cc/tCskh9NT/Whats-App-Image-2026-09-08-at-22-11-20-(3).jpg',
   galeriaFotos: [
-    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80',
+    'https://i.postimg.cc/jqgvwDPN/Whats-App-Image-2026-09-07-at-19-55-11-(1).jpg',
+    'https://i.postimg.cc/J76KDsZk/Whats-App-Image-2026-09-07-at-19-55-10.jpg',
+    'https://i.postimg.cc/1RCMn8wF/Whats-App-Image-2026-09-07-at-19-55-11-(2).jpg',
+    'https://i.postimg.cc/44Lw7YVV/Whats-App-Image-2026-09-08-at-22-11-20-(2).jpg',
   ],
 
   fraseRegalo:
@@ -162,15 +200,40 @@ export async function getConfirmedGuests(): Promise<{
   summary: DietarySummary;
   config: AppConfig;
 }> {
+  // LocalStorage Cache
+  const stored = localStorage.getItem(STORAGE_KEY);
+  let localRecords: RsvpRecord[] = stored ? JSON.parse(stored) : INITIAL_RECORDS;
+
+  const configStored = localStorage.getItem(CONFIG_KEY);
+  let localConfig: AppConfig = configStored
+    ? { ...DEFAULT_CONFIG, ...JSON.parse(configStored) }
+    : DEFAULT_CONFIG;
+
   try {
     const res = await fetch('/api/confirmados');
-    if (res.ok) {
+    const contentType = res.headers.get('content-type') || '';
+    if (res.ok && contentType.includes('application/json')) {
       const data = await res.json();
       if (Array.isArray(data.records)) {
+        // Merge records preserving all confirmations
+        const recordsMap = new Map<string, RsvpRecord>();
+        [...localRecords, ...data.records].forEach((r) => {
+          if (r.id) recordsMap.set(r.id, r);
+        });
+        const mergedRecords = Array.from(recordsMap.values());
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedRecords));
+
+        const mergedConfig: AppConfig = {
+          ...DEFAULT_CONFIG,
+          ...(data.config || {}),
+          ...(configStored ? JSON.parse(configStored) : {}),
+        };
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(mergedConfig));
+
         return {
-          records: data.records,
-          summary: calculateDietarySummary(data.records),
-          config: data.config || DEFAULT_CONFIG,
+          records: mergedRecords,
+          summary: calculateDietarySummary(mergedRecords),
+          config: mergedConfig,
         };
       }
     }
@@ -178,16 +241,10 @@ export async function getConfirmedGuests(): Promise<{
     console.warn('Backend API not reachable, using local storage cache', err);
   }
 
-  // LocalStorage Fallback
-  const stored = localStorage.getItem(STORAGE_KEY);
-  const records: RsvpRecord[] = stored ? JSON.parse(stored) : INITIAL_RECORDS;
-  const configStored = localStorage.getItem(CONFIG_KEY);
-  const config: AppConfig = configStored ? JSON.parse(configStored) : DEFAULT_CONFIG;
-
   return {
-    records,
-    summary: calculateDietarySummary(records),
-    config,
+    records: localRecords,
+    summary: calculateDietarySummary(localRecords),
+    config: localConfig,
   };
 }
 
@@ -202,26 +259,27 @@ export async function submitRsvp(record: Omit<RsvpRecord, 'id' | 'fechaCreacion'
 
   let sheetSynced = false;
 
-  // 1. Try server API
+  // 1. Keep local storage up to date immediately
+  const stored = localStorage.getItem(STORAGE_KEY);
+  const records: RsvpRecord[] = stored ? JSON.parse(stored) : [...INITIAL_RECORDS];
+  records.unshift(newRecord);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+
+  // 2. Try server API
   try {
     const res = await fetch('/api/rsvp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRecord),
     });
-    if (res.ok) {
+    const contentType = res.headers.get('content-type') || '';
+    if (res.ok && contentType.includes('application/json')) {
       const json = await res.json();
       sheetSynced = !!json.sheetSynced;
     }
   } catch (err) {
-    console.warn('Server API save failed, saving locally', err);
+    console.warn('Server API save failed, stored locally', err);
   }
-
-  // 2. Also keep local storage up to date
-  const stored = localStorage.getItem(STORAGE_KEY);
-  const records: RsvpRecord[] = stored ? JSON.parse(stored) : [...INITIAL_RECORDS];
-  records.unshift(newRecord);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
 
   // 3. Direct Google Sheets Webhook sync from client if configured
   const config = getConfig();
@@ -239,16 +297,17 @@ export async function submitRsvp(record: Omit<RsvpRecord, 'id' | 'fechaCreacion'
 
 // Delete an RSVP
 export async function deleteRsvp(id: string): Promise<boolean> {
-  try {
-    await fetch(`/api/confirmados/${id}`, { method: 'DELETE' });
-  } catch (e) {
-    console.warn('Server delete failed', e);
-  }
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     const records: RsvpRecord[] = JSON.parse(stored);
     const filtered = records.filter((r) => r.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  }
+
+  try {
+    await fetch(`/api/confirmados/${id}`, { method: 'DELETE' });
+  } catch (e) {
+    console.warn('Server delete failed', e);
   }
   return true;
 }
@@ -256,12 +315,12 @@ export async function deleteRsvp(id: string): Promise<boolean> {
 // Get and Save Config
 export function getConfig(): AppConfig {
   const stored = localStorage.getItem(CONFIG_KEY);
-  return stored ? JSON.parse(stored) : DEFAULT_CONFIG;
+  return stored ? { ...DEFAULT_CONFIG, ...JSON.parse(stored) } : DEFAULT_CONFIG;
 }
 
 export async function saveConfig(newConfig: Partial<AppConfig>): Promise<AppConfig> {
   const current = getConfig();
-  const updated = { ...current, ...newConfig };
+  const updated: AppConfig = { ...current, ...newConfig };
   localStorage.setItem(CONFIG_KEY, JSON.stringify(updated));
 
   try {
@@ -271,7 +330,7 @@ export async function saveConfig(newConfig: Partial<AppConfig>): Promise<AppConf
       body: JSON.stringify(updated),
     });
   } catch (e) {
-    console.warn('Server config save failed', e);
+    console.warn('Server config save failed, saved locally', e);
   }
   return updated;
 }
