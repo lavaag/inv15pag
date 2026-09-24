@@ -1,4 +1,5 @@
 import { RsvpRecord, DietarySummary, AppConfig } from '../types';
+import { LOCAL_IMAGES, normalizeImageUrl } from '../utils/imageUtils';
 
 const STORAGE_KEY = 'mis15_sofia_confirmados_v1';
 const CONFIG_KEY = 'mis15_sofia_config_v1';
@@ -127,18 +128,10 @@ export const DEFAULT_CONFIG: AppConfig = {
     'https://www.youtube.com/watch?v=Z9a4dzEGJxw&list=RDZ9a4dzEGJxw&start_radio=1&pp=ygUQdGVuZ28gdW4gZmVsbGluZ6AHAQ%3D%3D',
   musicaTitulo: 'PEPU- TENGO UN FEELING',
 
-  heroImageUrl:
-    'https://i.postimg.cc/mrY8tVNy/Whats-App-Image-2026-09-07-at-19-55-12-(2).jpg',
-  dressCodeImageUrl:
-    'https://i.postimg.cc/9F08JdCT/Whats-App-Image-2026-09-08-at-22-11-18-(2).jpg',
-  finalImageUrl:
-    'https://i.postimg.cc/tCskh9NT/Whats-App-Image-2026-09-08-at-22-11-20-(3).jpg',
-  galeriaFotos: [
-    'https://i.postimg.cc/jqgvwDPN/Whats-App-Image-2026-09-07-at-19-55-11-(1).jpg',
-    'https://i.postimg.cc/J76KDsZk/Whats-App-Image-2026-09-07-at-19-55-10.jpg',
-    'https://i.postimg.cc/1RCMn8wF/Whats-App-Image-2026-09-07-at-19-55-11-(2).jpg',
-    'https://i.postimg.cc/44Lw7YVV/Whats-App-Image-2026-09-08-at-22-11-20-(2).jpg',
-  ],
+  heroImageUrl: LOCAL_IMAGES.hero,
+  dressCodeImageUrl: LOCAL_IMAGES.dressCode,
+  finalImageUrl: LOCAL_IMAGES.final,
+  galeriaFotos: [...LOCAL_IMAGES.gallery],
 
   fraseRegalo:
     'NADA ES MÁS IMPORTANTE QUE TU PRESENCIA, PERO SI QUERÉS HACERME UN REGALO PODÉS COLABORAR CON MI VIAJE...',
@@ -194,6 +187,21 @@ function countCondition(cond: string, summary: DietarySummary) {
   else summary.tradicional++;
 }
 
+export function sanitizeConfig(cfg: Partial<AppConfig>): AppConfig {
+  const merged: AppConfig = { ...DEFAULT_CONFIG, ...cfg };
+  merged.heroImageUrl = normalizeImageUrl(merged.heroImageUrl, LOCAL_IMAGES.hero);
+  merged.dressCodeImageUrl = normalizeImageUrl(merged.dressCodeImageUrl, LOCAL_IMAGES.dressCode);
+  merged.finalImageUrl = normalizeImageUrl(merged.finalImageUrl, LOCAL_IMAGES.final);
+  if (Array.isArray(merged.galeriaFotos) && merged.galeriaFotos.length > 0) {
+    merged.galeriaFotos = merged.galeriaFotos.map((img, idx) =>
+      normalizeImageUrl(img, LOCAL_IMAGES.gallery[idx] || LOCAL_IMAGES.gallery[0])
+    );
+  } else {
+    merged.galeriaFotos = [...LOCAL_IMAGES.gallery];
+  }
+  return merged;
+}
+
 // Fetch all confirmed guests
 export async function getConfirmedGuests(): Promise<{
   records: RsvpRecord[];
@@ -206,7 +214,7 @@ export async function getConfirmedGuests(): Promise<{
 
   const configStored = localStorage.getItem(CONFIG_KEY);
   let localConfig: AppConfig = configStored
-    ? { ...DEFAULT_CONFIG, ...JSON.parse(configStored) }
+    ? sanitizeConfig(JSON.parse(configStored))
     : DEFAULT_CONFIG;
 
   try {
@@ -223,11 +231,11 @@ export async function getConfirmedGuests(): Promise<{
         const mergedRecords = Array.from(recordsMap.values());
         localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedRecords));
 
-        const mergedConfig: AppConfig = {
+        const mergedConfig: AppConfig = sanitizeConfig({
           ...DEFAULT_CONFIG,
           ...(data.config || {}),
           ...(configStored ? JSON.parse(configStored) : {}),
-        };
+        });
         localStorage.setItem(CONFIG_KEY, JSON.stringify(mergedConfig));
 
         return {
@@ -315,12 +323,12 @@ export async function deleteRsvp(id: string): Promise<boolean> {
 // Get and Save Config
 export function getConfig(): AppConfig {
   const stored = localStorage.getItem(CONFIG_KEY);
-  return stored ? { ...DEFAULT_CONFIG, ...JSON.parse(stored) } : DEFAULT_CONFIG;
+  return stored ? sanitizeConfig(JSON.parse(stored)) : DEFAULT_CONFIG;
 }
 
 export async function saveConfig(newConfig: Partial<AppConfig>): Promise<AppConfig> {
   const current = getConfig();
-  const updated: AppConfig = { ...current, ...newConfig };
+  const updated: AppConfig = sanitizeConfig({ ...current, ...newConfig });
   localStorage.setItem(CONFIG_KEY, JSON.stringify(updated));
 
   try {

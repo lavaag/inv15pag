@@ -1,0 +1,17 @@
+{
+  "aliasCbu": "SOFIA.MIS15.CLAHE",
+  "titularCbu": "Sofía Álvarez / Familia",
+  "bancoNombre": "Banco Santander / Mercado Pago",
+  "cbuCompleto": "0720123488000034567891",
+  "instagramTag": "@sofi_mis15",
+  "googleSheetsWebhookUrl": "",
+  "heroImageUrl": "/images/hero.jpg",
+  "dressCodeImageUrl": "/images/dresscode.jpg",
+  "finalImageUrl": "/images/final.jpg",
+  "galeriaFotos": [
+    "/images/gallery-1.jpg",
+    "/images/gallery-2.jpg",
+    "/images/gallery-3.jpg",
+    "/images/gallery-4.jpg"
+  ]
+}

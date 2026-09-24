@@ -27,6 +27,7 @@ import { AppConfig } from '../types';
 import { saveConfig, DEFAULT_CONFIG } from '../services/api';
 import { extractYouTubeId } from '../utils/youtube';
 import { BackgroundMusicPlayer } from './BackgroundMusicPlayer';
+import { LOCAL_IMAGES, normalizeImageUrl, handleImageError } from '../utils/imageUtils';
 
 interface AdminPanelProps {
   config: AppConfig;
@@ -768,12 +769,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <div className="w-32 h-44 border border-[#e8dbe2] overflow-hidden bg-gray-100 shrink-0 shadow-sm">
                   <img
-                    src={formData.heroImageUrl}
+                    src={normalizeImageUrl(formData.heroImageUrl, LOCAL_IMAGES.hero)}
                     alt="Preview Portada"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = DEFAULT_CONFIG.heroImageUrl || '';
-                    }}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, LOCAL_IMAGES.hero)}
                   />
                 </div>
                 <div className="flex-1 space-y-2 w-full">
@@ -781,7 +781,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="text"
                     value={formData.heroImageUrl || ''}
                     onChange={(e) => handleChange('heroImageUrl', e.target.value)}
-                    placeholder="https://images.unsplash.com/..."
+                    placeholder="/images/hero.jpg o link directo..."
                     className="w-full bg-[#faf6f8] border border-[#d9bdcb] p-2.5 text-xs text-[#2b2b2b] focus:outline-none focus:border-[#7e526a] font-mono"
                   />
                   <div className="flex flex-wrap gap-2 pt-1">
@@ -808,9 +808,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <div className="w-24 h-24 border border-[#e8dbe2] overflow-hidden bg-gray-100 shrink-0 shadow-sm">
                   <img
-                    src={formData.dressCodeImageUrl}
+                    src={normalizeImageUrl(formData.dressCodeImageUrl, LOCAL_IMAGES.dressCode)}
                     alt="Dress code preview"
                     className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, LOCAL_IMAGES.dressCode)}
                   />
                 </div>
                 <div className="flex-1 w-full">
@@ -834,14 +836,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   const currentImg =
                     formData.galeriaFotos?.[index] ||
                     DEFAULT_CONFIG.galeriaFotos?.[index] ||
-                    '';
+                    LOCAL_IMAGES.gallery[index];
                   return (
                     <div key={index} className="flex items-center gap-3 bg-[#faf6f8] p-2 border border-[#e8dbe2]">
                       <div className="w-14 h-14 bg-gray-200 overflow-hidden shrink-0 border border-gray-300">
                         <img
-                          src={currentImg}
+                          src={normalizeImageUrl(currentImg, LOCAL_IMAGES.gallery[index])}
                           alt={`Foto ${index + 1}`}
                           className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => handleImageError(e, LOCAL_IMAGES.gallery[index])}
                         />
                       </div>
                       <div className="flex-1">
@@ -872,14 +876,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <div className="w-28 h-36 border border-[#e8dbe2] overflow-hidden bg-gray-100 shrink-0 shadow-sm">
                   <img
-                    src={formData.finalImageUrl || DEFAULT_CONFIG.finalImageUrl}
+                    src={normalizeImageUrl(formData.finalImageUrl, LOCAL_IMAGES.final)}
                     alt="Preview Foto Final"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        DEFAULT_CONFIG.finalImageUrl ||
-                        'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=80';
-                    }}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, LOCAL_IMAGES.final)}
                   />
                 </div>
                 <div className="flex-1 space-y-2 w-full">

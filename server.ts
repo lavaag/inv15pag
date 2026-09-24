@@ -159,9 +159,14 @@ app.post('/api/config', (req, res) => {
 });
 
 // Static assets
+const publicDir = path.resolve(__dirname, 'public');
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir, { maxAge: '30d' }));
+}
+
 const distDir = path.resolve(__dirname, 'dist');
 if (fs.existsSync(distDir)) {
-  app.use(express.static(distDir));
+  app.use(express.static(distDir, { maxAge: '7d' }));
   app.get('*', (req, res) => {
     res.sendFile(path.join(distDir, 'index.html'));
   });

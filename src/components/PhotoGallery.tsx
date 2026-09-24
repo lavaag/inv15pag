@@ -8,37 +8,37 @@ interface PhotoItem {
   isCustom?: boolean;
 }
 
-// Curated collection reflecting Sofía's style (corset, sparkle skirt, Clahe Eventos ambient blue lighting, outdoor golden hour)
+// Curated collection of Sofía's book photos
 const DEFAULT_PHOTOS: PhotoItem[] = [
   {
     id: 'p1',
-    url: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/gallery-1.jpg',
     caption: 'Book de 15 • Noche de Gala',
   },
   {
     id: 'p2',
-    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/gallery-2.jpg',
     caption: 'Sonrisas que iluminan • Mis 15',
   },
   {
     id: 'p3',
-    url: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/gallery-3.jpg',
     caption: 'Clahe Eventos • Luces y Elegancia',
   },
   {
     id: 'p4',
-    url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/gallery-4.jpg',
     caption: 'Atardecer mágico al aire libre',
   },
   {
     id: 'p5',
-    url: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1000&q=80',
-    caption: 'Momentos únicos antes de la fiesta',
+    url: '/images/hero.jpg',
+    caption: 'Mis 15 Sofía • Momentos Inolvidables',
   },
   {
     id: 'p6',
-    url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=80',
-    caption: 'Celebrando los 15 con el corazón',
+    url: '/images/dresscode.jpg',
+    caption: 'Celebrando con el corazón',
   },
 ];
 
@@ -130,6 +130,9 @@ export const PhotoGallery: React.FC = () => {
                 src={photo.url}
                 alt={photo.caption}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                referrerPolicy="no-referrer"
               />
 
               {/* Gradient overlay */}
@@ -196,6 +199,9 @@ export const PhotoGallery: React.FC = () => {
               src={photos[selectedPhotoIndex].url}
               alt={photos[selectedPhotoIndex].caption}
               className="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain border border-amber-400/30 shadow-2xl"
+              loading="eager"
+              decoding="async"
+              referrerPolicy="no-referrer"
             />
             <p className="mt-3 text-sm font-medium text-amber-200">
               {photos[selectedPhotoIndex].caption} ({selectedPhotoIndex + 1} / {photos.length})

@@ -2,7 +2,22 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { RsvpRecord, DietaryCondition, DietarySummary, AppConfig } from '../types';
 import { submitRsvp, exportToExcelCsv } from '../services/api';
 import confetti from 'canvas-confetti';
-import { Copy, Check, FileSpreadsheet, ExternalLink, Calendar as CalendarIcon, MapPin, Heart, Lock } from 'lucide-react';
+import {
+  Copy,
+  Check,
+  FileSpreadsheet,
+  ExternalLink,
+  Calendar as CalendarIcon,
+  MapPin,
+  Heart,
+  Lock,
+  Camera,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2
+} from 'lucide-react';
+import { LOCAL_IMAGES, normalizeImageUrl, handleImageError } from '../utils/imageUtils';
 
 interface DigitalInvitationProps {
   records: RsvpRecord[];
@@ -81,6 +96,30 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
   const [errorMessage, setErrorMessage] = useState('');
   const [copiedAlias, setCopiedAlias] = useState(false);
   const [showGiftDetails, setShowGiftDetails] = useState(false);
+
+  // Photo gallery modal state
+  const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null);
+
+  const galleryPhotos = useMemo(() => {
+    if (Array.isArray(config.galeriaFotos) && config.galeriaFotos.length > 0) {
+      return config.galeriaFotos;
+    }
+    return LOCAL_IMAGES.gallery;
+  }, [config.galeriaFotos]);
+
+  const handlePrevPhoto = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (activePhotoIndex !== null) {
+      setActivePhotoIndex((prev) => (prev === null || prev === 0 ? galleryPhotos.length - 1 : prev - 1));
+    }
+  };
+
+  const handleNextPhoto = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (activePhotoIndex !== null) {
+      setActivePhotoIndex((prev) => (prev === null || prev >= galleryPhotos.length - 1 ? 0 : prev + 1));
+    }
+  };
 
   // Hidden host access state (triggered only via secret 4-tap or keyboard shortcut)
   const [secretClicks, setSecretClicks] = useState<number>(0);
@@ -204,9 +243,13 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
       <div className="relative w-full aspect-[9/14] sm:aspect-[16/10] md:aspect-auto md:h-[620px] lg:h-[700px] overflow-hidden bg-[#7e526a]">
         {/* Photo of quinceañera with rose-gold metallic heart balloons */}
         <img
-          src={config.heroImageUrl || "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80"}
+          src={normalizeImageUrl(config.heroImageUrl, LOCAL_IMAGES.hero)}
           alt={`Mis 15 ${config.nombreQuinceanera || 'Sofía'}`}
-          className="w-full h-full object-cover object-center filter brightness-[0.92]"
+          className="w-full h-full object-cover object-center filter brightness-[0.92] transition-opacity duration-300"
+          loading="eager"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={(e) => handleImageError(e, LOCAL_IMAGES.hero)}
         />
 
         {/* Gradient overlay for soft text contrast */}
@@ -354,9 +397,13 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
         {/* ================= SECTION 5: CELEBRATION PHOTO (Image 4 bottom) ================= */}
         <div className="w-full aspect-[4/5] md:aspect-auto md:h-full min-h-[360px] md:min-h-[460px] overflow-hidden bg-[#7e526a]">
           <img
-            src={config.dressCodeImageUrl || "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1000&q=80"}
+            src={normalizeImageUrl(config.dressCodeImageUrl, LOCAL_IMAGES.dressCode)}
             alt="Elegancia"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center transition-opacity duration-300"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onError={(e) => handleImageError(e, LOCAL_IMAGES.dressCode)}
           />
         </div>
       </div>
@@ -431,6 +478,49 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
             </div>
           </div>
         )}
+      </div>
+
+      {/* ================= SECTION: BOOK DE FOTOS / GALERÍA DE RECUERDOS ================= */}
+      <div className="bg-[#faf6f8] py-12 md:py-16 px-4 sm:px-6 md:px-8 border-y border-[#ede6eb]">
+        <div className="max-w-4xl mx-auto text-center space-y-3 mb-8">
+          <div className="w-10 h-10 mx-auto flex items-center justify-center text-[#c06d7d]">
+            <Camera className="w-7 h-7 stroke-[1.4]" />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-montserrat font-normal tracking-[0.18em] uppercase text-[#7e526a]">
+            BOOK DE FOTOS
+          </h2>
+          <div className="w-16 h-[1.5px] bg-[#c06d7d] mx-auto"></div>
+          <p className="text-[11px] sm:text-xs font-montserrat text-[#7e526a]/80 tracking-[0.15em] uppercase">
+            RECUERDOS DE MIS 15 • TOCÁ PARA AMPLIAR
+          </p>
+        </div>
+
+        {/* 4 Photo Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto">
+          {galleryPhotos.map((photoUrl, idx) => (
+            <div
+              key={idx}
+              onClick={() => setActivePhotoIndex(idx)}
+              className="group relative aspect-[3/4] overflow-hidden rounded-xs bg-[#7e526a]/15 cursor-pointer shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-[#e8dbe2]"
+            >
+              <img
+                src={normalizeImageUrl(photoUrl, LOCAL_IMAGES.gallery[idx] || LOCAL_IMAGES.gallery[0])}
+                alt={`Book Sofía foto ${idx + 1}`}
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                referrerPolicy="no-referrer"
+                onError={(e) => handleImageError(e, LOCAL_IMAGES.gallery[idx] || LOCAL_IMAGES.gallery[0])}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+                <span className="inline-flex items-center gap-1 text-white text-[10px] font-bold tracking-widest uppercase bg-black/50 backdrop-blur-xs px-2.5 py-1 rounded-xs self-center">
+                  <Maximize2 className="w-3 h-3" />
+                  <span>AMPLIAR</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ================= SECTION 8: CONFIRMÁ TU ASISTENCIA (Image 6) ================= */}
@@ -651,9 +741,13 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
         {/* Photo */}
         <div className="w-full aspect-[4/5] md:aspect-auto md:h-full min-h-[360px] md:min-h-[460px] overflow-hidden bg-[#7e526a]">
           <img
-            src={config.finalImageUrl || "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1000&q=80"}
+            src={normalizeImageUrl(config.finalImageUrl, LOCAL_IMAGES.final)}
             alt={config.nombreQuinceanera || "Sofía"}
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center transition-opacity duration-300"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onError={(e) => handleImageError(e, LOCAL_IMAGES.final)}
           />
         </div>
 
@@ -754,6 +848,64 @@ export const DigitalInvitationCard: React.FC<DigitalInvitationProps> = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Lightbox Modal for Photo Gallery */}
+      {activePhotoIndex !== null && (
+        <div
+          onClick={() => setActivePhotoIndex(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-fade-in"
+        >
+          <button
+            onClick={() => setActivePhotoIndex(null)}
+            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/15 hover:bg-white/25 text-white transition-colors z-20"
+            title="Cerrar"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={handlePrevPhoto}
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors z-20"
+            title="Foto anterior"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-4xl max-h-[85vh] flex flex-col items-center select-none"
+          >
+            <img
+              src={normalizeImageUrl(
+                galleryPhotos[activePhotoIndex],
+                LOCAL_IMAGES.gallery[activePhotoIndex] || LOCAL_IMAGES.gallery[0]
+              )}
+              alt={`Book Sofía foto ${activePhotoIndex + 1}`}
+              className="max-h-[75vh] w-auto max-w-full rounded-xs object-contain shadow-2xl border border-white/20"
+              loading="eager"
+              decoding="async"
+              referrerPolicy="no-referrer"
+              onError={(e) =>
+                handleImageError(
+                  e,
+                  LOCAL_IMAGES.gallery[activePhotoIndex] || LOCAL_IMAGES.gallery[0]
+                )
+              }
+            />
+            <p className="mt-3 text-xs sm:text-sm font-medium tracking-widest uppercase text-white/80">
+              Foto {activePhotoIndex + 1} de {galleryPhotos.length} • Mis 15 Sofía
+            </p>
+          </div>
+
+          <button
+            onClick={handleNextPhoto}
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors z-20"
+            title="Foto siguiente"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
       )}
     </div>
